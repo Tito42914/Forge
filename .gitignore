@@ -1,0 +1,23 @@
+# Local Python virtual environment
+.venv/
+
+# Python-generated cache and bytecode
+__pycache__/
+*.py[cod]
+
+# Local environment variables and secrets
+.env
+
+# Test, coverage, and linting output
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Python packaging output
+*.egg-info/
+build/
+dist/
+
+# Personal development journal
+docs/session-logs/
