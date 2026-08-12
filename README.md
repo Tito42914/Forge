@@ -14,6 +14,7 @@ The current application provides:
 - A health-check endpoint at `GET /health`.
 - Python 3.13 project configuration.
 - An isolated local development environment.
+- An automated API test for the health endpoint.
 
 ## Technology
 
@@ -22,6 +23,24 @@ The current application provides:
 - Uvicorn
 - Pydantic
 - Git
+- pytest
+
+## Running tests
+
+Install Forge with its development dependencies:
+
+```powershell
+python -m pip install --editable ".[dev]"
+```
+
+Run the automated test suite:
+
+```powershell
+python -m pytest
+```
+
+The current test verifies that `GET /health` returns HTTP `200 OK` and the expected JSON response.
+
 
 ## Project structure
 
