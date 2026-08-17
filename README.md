@@ -12,9 +12,11 @@ The current application provides:
 
 - A FastAPI application entry point.
 - A health-check endpoint at `GET /health`.
+- A system-information endpoint at `GET /system`.
+- Typed response schemas using Pydantic.
+- Automated API tests for both endpoints.
 - Python 3.13 project configuration.
 - An isolated local development environment.
-- An automated API test for the health endpoint.
 
 ## Technology
 
@@ -39,17 +41,55 @@ Run the automated test suite:
 python -m pytest
 ```
 
-The current test verifies that `GET /health` returns HTTP `200 OK` and the expected JSON response.
+The current tests verify the health response and the live system information returned by the machine running Forge.
 
+## API endpoints
+
+### `GET /health`
+
+Reports whether the Forge application is running.
+
+Example response:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+### `GET /system`
+
+Returns basic information about the machine running Forge:
+
+- Hostname
+- Operating system
+- Python version
+- UTC collection timestamp
+
+Example response:
+
+```json
+{
+  "hostname": "example-host",
+  "operating_system": "Windows",
+  "python_version": "3.13.5",
+  "collected_at": "2026-08-17T14:25:14.714464Z"
+}
+```
 
 ## Project structure
 
 ```text
 Forge/
-├── src/
-│   └── forge/
-│       ├── __init__.py
-│       └── main.py
-├── .gitignore
-├── pyproject.toml
-└── README.md
+|-- src/
+|   `-- forge/
+|       |-- __init__.py
+|       |-- main.py
+|       `-- schemas.py
+|-- tests/
+|   |-- test_health.py
+|   `-- test_system.py
+|-- .gitignore
+|-- pyproject.toml
+`-- README.md
+```
