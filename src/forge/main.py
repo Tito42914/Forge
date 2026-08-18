@@ -6,7 +6,6 @@ from fastapi import FastAPI
 
 from forge.schemas import HealthResponse, SystemInfoResponse
 
-
 app = FastAPI(
     title="Forge",
     version="0.1.0",

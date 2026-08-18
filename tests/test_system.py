@@ -6,7 +6,6 @@ from fastapi.testclient import TestClient
 
 from forge.main import app
 
-
 client = TestClient(app)
 
 
@@ -24,4 +23,3 @@ def test_system_info_returns_current_host_details() -> None:
     assert data["operating_system"] == platform.system()
     assert data["python_version"] == platform.python_version()
     assert before_request <= collected_at <= after_request
-    
