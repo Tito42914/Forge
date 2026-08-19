@@ -4,11 +4,14 @@ from datetime import UTC, datetime
 
 from fastapi import FastAPI
 
+from forge.config import Settings
 from forge.schemas import HealthResponse, SystemInfoResponse
 
+settings = Settings()
+
 app = FastAPI(
-    title="Forge",
-    version="0.1.0",
+    title=settings.app_name,
+    version=settings.app_version,
 )
 
 

@@ -27,6 +27,26 @@ The current application provides:
 - Git
 - pytest
 
+## Configuration
+
+Forge provides default development settings and can be configured with environment variables or a local `.env` file.
+
+To create a local configuration file in PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Supported variables:
+
+- `FORGE_APP_NAME`
+- `FORGE_APP_VERSION`
+- `FORGE_ENVIRONMENT`
+
+`FORGE_ENVIRONMENT` accepts `development`, `testing`, or `production`.
+
+The local `.env` file is ignored by Git and must not contain values intended for version control.
+
 ## Running tests
 
 Install Forge with its development dependencies:
