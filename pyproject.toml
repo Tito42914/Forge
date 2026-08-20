@@ -9,6 +9,7 @@ description = "A Python backend for infrastructure monitoring and automation."
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "fastapi[standard]>=0.115,<1.0",
+    "psutil>=7.2,<8.0",
     "pydantic-settings>=2.14,<3.0",
 ]
 

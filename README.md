@@ -13,8 +13,9 @@ The current application provides:
 - A FastAPI application entry point.
 - A health-check endpoint at `GET /health`.
 - A system-information endpoint at `GET /system`.
+- A current resource-metrics endpoint at `GET /metrics/current`.
 - Typed response schemas using Pydantic.
-- Automated API tests for both endpoints.
+- Automated API tests for the application endpoints and configuration.
 - Python 3.13 project configuration.
 - An isolated local development environment.
 
@@ -97,6 +98,26 @@ Example response:
 }
 ```
 
+### `GET /metrics/current`
+
+Returns a current snapshot of the host machine's resource usage:
+
+- CPU usage
+- Memory usage
+- Disk usage
+- UTC collection timestamp
+
+Example response:
+
+```json
+{
+  "cpu_percent": 4.2,
+  "memory_percent": 69.9,
+  "disk_percent": 95.7,
+  "collected_at": "2026-08-20T16:21:41.620674Z"
+}
+```
+
 ## Project structure
 
 ```text
@@ -107,7 +128,9 @@ Forge/
 |       |-- main.py
 |       `-- schemas.py
 |-- tests/
+|   |-- test_config.py
 |   |-- test_health.py
+|   |-- test_metrics.py
 |   `-- test_system.py
 |-- .gitignore
 |-- pyproject.toml

@@ -1,11 +1,13 @@
 import platform
 import socket
 from datetime import UTC, datetime
+from pathlib import Path
 
+import psutil
 from fastapi import FastAPI
 
 from forge.config import Settings
-from forge.schemas import HealthResponse, SystemInfoResponse
+from forge.schemas import CurrentMetricsResponse, HealthResponse, SystemInfoResponse
 
 settings = Settings()
 
@@ -26,5 +28,17 @@ def read_system_info() -> SystemInfoResponse:
         hostname=socket.gethostname(),
         operating_system=platform.system(),
         python_version=platform.python_version(),
+        collected_at=datetime.now(UTC),
+    )
+
+
+@app.get("/metrics/current", response_model=CurrentMetricsResponse)
+def read_current_metrics() -> CurrentMetricsResponse:
+    disk_root = Path.cwd().anchor
+
+    return CurrentMetricsResponse(
+        cpu_percent=psutil.cpu_percent(interval=0.1),
+        memory_percent=psutil.virtual_memory().percent,
+        disk_percent=psutil.disk_usage(disk_root).percent,
         collected_at=datetime.now(UTC),
     )
