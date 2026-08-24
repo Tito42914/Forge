@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class HealthResponse(BaseModel):
@@ -15,7 +15,7 @@ class SystemInfoResponse(BaseModel):
 
 
 class CurrentMetricsResponse(BaseModel):
-    cpu_percent: float
-    memory_percent: float
-    disk_percent: float
+    cpu_percent: float = Field(ge=0, le=100)
+    memory_percent: float = Field(ge=0, le=100)
+    disk_percent: float = Field(ge=0, le=100)
     collected_at: datetime
