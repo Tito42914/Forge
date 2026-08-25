@@ -13,6 +13,7 @@ def test_settings_use_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
     assert settings.app_name == "Forge"
     assert settings.app_version == "0.1.0"
     assert settings.environment == "development"
+    assert settings.log_level == "INFO"
 
 
 def test_settings_read_environment_variables(
@@ -21,9 +22,11 @@ def test_settings_read_environment_variables(
     monkeypatch.setenv("FORGE_APP_NAME", "Forge Test")
     monkeypatch.setenv("FORGE_APP_VERSION", "9.9.9")
     monkeypatch.setenv("FORGE_ENVIRONMENT", "testing")
+    monkeypatch.setenv("FORGE_LOG_LEVEL", "DEBUG")
 
     settings = Settings(_env_file=None)
 
     assert settings.app_name == "Forge Test"
     assert settings.app_version == "9.9.9"
     assert settings.environment == "testing"
+    assert settings.log_level == "DEBUG"

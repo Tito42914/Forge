@@ -14,6 +14,7 @@ The current application provides:
 - A health-check endpoint at `GET /health`.
 - A system-information endpoint at `GET /system`.
 - A current resource-metrics endpoint at `GET /metrics/current`.
+- Configurable application logging with startup and shutdown messages.
 - Typed response schemas using Pydantic.
 - Automated API tests for the application endpoints and configuration.
 - Python 3.13 project configuration.
@@ -25,6 +26,7 @@ The current application provides:
 - FastAPI
 - Uvicorn
 - Pydantic
+- Python standard-library logging
 - Git
 - pytest
 

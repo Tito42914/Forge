@@ -14,3 +14,4 @@ class Settings(BaseSettings):
     app_name: str = "Forge"
     app_version: str = "0.1.0"
     environment: Literal["development", "testing", "production"] = "development"
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"

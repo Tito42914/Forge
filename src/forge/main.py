@@ -1,5 +1,7 @@
 import platform
 import socket
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -7,13 +9,32 @@ import psutil
 from fastapi import FastAPI
 
 from forge.config import Settings
+from forge.logging_config import configure_logging, get_logger
 from forge.schemas import CurrentMetricsResponse, HealthResponse, SystemInfoResponse
 
 settings = Settings()
+configure_logging(settings.log_level)
+logger = get_logger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    logger.info(
+        "%s %s starting in the %s environment",
+        settings.app_name,
+        settings.app_version,
+        settings.environment,
+    )
+
+    yield
+
+    logger.info("%s stopping", settings.app_name)
+
 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
+    lifespan=lifespan,
 )
 
 
