@@ -19,3 +19,7 @@ class CurrentMetricsResponse(BaseModel):
     memory_percent: float = Field(ge=0, le=100)
     disk_percent: float = Field(ge=0, le=100)
     collected_at: datetime
+
+
+class ErrorResponse(BaseModel):
+    detail: str

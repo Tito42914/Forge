@@ -14,6 +14,7 @@ The current application provides:
 - A health-check endpoint at `GET /health`.
 - A system-information endpoint at `GET /system`.
 - A current resource-metrics endpoint at `GET /metrics/current`.
+- Intentional `503 Service Unavailable` handling for metrics collection failures.
 - Configurable application logging with startup and shutdown messages.
 - Typed response schemas using Pydantic.
 - Automated API tests for the application endpoints and configuration.
@@ -119,6 +120,10 @@ Example response:
   "collected_at": "2026-08-20T16:21:41.620674Z"
 }
 ```
+
+Metrics collection is separated from the HTTP route. If Forge cannot retrieve
+the current resource data, the failure is logged and the endpoint returns a
+documented `503 Service Unavailable` response.
 
 ## Project structure
 

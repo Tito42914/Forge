@@ -3,14 +3,18 @@ import socket
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
-from pathlib import Path
 
-import psutil
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 
 from forge.config import Settings
 from forge.logging_config import configure_logging, get_logger
-from forge.schemas import CurrentMetricsResponse, HealthResponse, SystemInfoResponse
+from forge.schemas import (
+    CurrentMetricsResponse,
+    ErrorResponse,
+    HealthResponse,
+    SystemInfoResponse,
+)
+from forge.system_metrics import MetricsCollectionError, collect_current_metrics
 
 settings = Settings()
 configure_logging(settings.log_level)
@@ -53,13 +57,21 @@ def read_system_info() -> SystemInfoResponse:
     )
 
 
-@app.get("/metrics/current", response_model=CurrentMetricsResponse)
+@app.get(
+    "/metrics/current",
+    response_model=CurrentMetricsResponse,
+    responses={
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "model": ErrorResponse,
+            "description": "System metrics are temporarily unavailable",
+        }
+    },
+)
 def read_current_metrics() -> CurrentMetricsResponse:
-    disk_root = Path.cwd().anchor
-
-    return CurrentMetricsResponse(
-        cpu_percent=psutil.cpu_percent(interval=0.1),
-        memory_percent=psutil.virtual_memory().percent,
-        disk_percent=psutil.disk_usage(disk_root).percent,
-        collected_at=datetime.now(UTC),
-    )
+    try:
+        return collect_current_metrics()
+    except MetricsCollectionError as error:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Current system metrics are temporarily unavailable",
+        ) from error

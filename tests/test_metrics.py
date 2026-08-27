@@ -6,6 +6,7 @@ from pydantic import ValidationError
 
 from forge.main import app
 from forge.schemas import CurrentMetricsResponse
+from forge.system_metrics import MetricsCollectionError
 
 client = TestClient(app)
 
@@ -51,3 +52,22 @@ def test_current_metrics_rejects_invalid_percentages(
 
     with pytest.raises(ValidationError):
         CurrentMetricsResponse(**metrics)
+
+
+def test_current_metrics_returns_503_when_collection_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def raise_metrics_collection_error() -> CurrentMetricsResponse:
+        raise MetricsCollectionError("Simulated metrics failure")
+
+    monkeypatch.setattr(
+        "forge.main.collect_current_metrics",
+        raise_metrics_collection_error,
+    )
+
+    response = client.get("/metrics/current")
+
+    assert response.status_code == 503
+    assert response.json() == {
+        "detail": "Current system metrics are temporarily unavailable"
+    }
