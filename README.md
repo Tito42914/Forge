@@ -6,7 +6,12 @@ The project is being developed incrementally as a portfolio-quality demonstratio
 
 ## Current status
 
-Forge is in Phase 1 of development.
+Forge has completed Phase 1: a portfolio-ready Python backend foundation.
+The `v0.1.0` milestone provides a tested, configurable and observable API for
+current host information and resource monitoring.
+
+Phase 2 will introduce relational data modelling and historical metric
+persistence without expanding the completed Phase 1 scope.
 
 The current application provides:
 
@@ -27,9 +32,13 @@ The current application provides:
 - FastAPI
 - Uvicorn
 - Pydantic
+- Pydantic Settings
+- psutil
 - Python standard-library logging
-- Git
 - pytest
+- Ruff
+- Git and GitHub
+- GitHub Actions
 
 ## Configuration
 
@@ -46,12 +55,14 @@ Supported variables:
 - `FORGE_APP_NAME`
 - `FORGE_APP_VERSION`
 - `FORGE_ENVIRONMENT`
+- `FORGE_LOG_LEVEL`
 
 `FORGE_ENVIRONMENT` accepts `development`, `testing`, or `production`.
+`FORGE_LOG_LEVEL` accepts `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL`.
 
 The local `.env` file is ignored by Git and must not contain values intended for version control.
 
-## Running tests
+## Running Forge
 
 Install Forge with its development dependencies:
 
@@ -59,13 +70,25 @@ Install Forge with its development dependencies:
 python -m pip install --editable ".[dev]"
 ```
 
+Start the development server:
+
+```powershell
+python -m uvicorn forge.main:app --reload
+```
+
+The API is then available at `http://127.0.0.1:8000`. Interactive API
+documentation is available at `http://127.0.0.1:8000/docs`.
+
+## Running tests
+
 Run the automated test suite:
 
 ```powershell
 python -m pytest
 ```
 
-The current tests verify the health response and the live system information returned by the machine running Forge.
+The current tests cover application configuration, logging, API responses,
+resource-metric validation, service behavior, and metrics collection failures.
 
 ## API endpoints
 
@@ -129,16 +152,25 @@ documented `503 Service Unavailable` response.
 
 ```text
 Forge/
+|-- .github/
+|   `-- workflows/
+|       `-- ci.yml
 |-- src/
 |   `-- forge/
 |       |-- __init__.py
+|       |-- config.py
+|       |-- logging_config.py
 |       |-- main.py
-|       `-- schemas.py
+|       |-- schemas.py
+|       `-- system_metrics.py
 |-- tests/
 |   |-- test_config.py
 |   |-- test_health.py
+|   |-- test_logging_config.py
 |   |-- test_metrics.py
+|   |-- test_system_metrics.py
 |   `-- test_system.py
+|-- .env.example
 |-- .gitignore
 |-- pyproject.toml
 `-- README.md
